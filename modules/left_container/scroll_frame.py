@@ -1,12 +1,17 @@
-import customtkinter
+import customtkinter as ctk
 from ..mainframe import screen
 
-vertical_scroll = customtkinter.CTkScrollableFrame( #класс для скролл-рамки
-    master=screen, #родительский элемент
-    width=275, #ширина
-    height=800, #высота
-    border_color="#FFFFFF", #цвет рамки
-    border_width=3, #ширина рамки
-    corner_radius=20 #закругление углов
-)   
-vertical_scroll.pack(anchor="w") #разместили в родителе, прижав к ЗАПАДУ "w"
+class Vertical_Scroll(ctk.CTkScrollableFrame):
+    def __init__(self, child_master, width, height, border_color, border_width, corner_radius, side):
+        ctk.CTkScrollableFrame.__init__(
+            self,
+            master=child_master,
+            width=width,
+            height=height, 
+            border_color=border_color,
+            border_width=border_width,
+            corner_radius=corner_radius
+        )
+        self.pack(anchor=side)
+
+vertical_scroll = Vertical_Scroll( screen, 275, 800, "#FFFFFF", 3, 20, "w" )
