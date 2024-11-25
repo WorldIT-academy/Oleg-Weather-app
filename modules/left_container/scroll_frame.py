@@ -10,7 +10,8 @@ class Vertical_Scroll(ctk.CTkScrollableFrame):
             height=height, 
             border_color=border_color,
             border_width=border_width,
-            corner_radius=corner_radius
+            corner_radius=corner_radius,
+            fg_color="#3c5e85"
         )
         self.pack(anchor=side)
 
