@@ -61,13 +61,18 @@ class City_Frame(ctk.CTkFrame):
 cities = ["Dnipro", "Kyiv", "Budapest", "Warsaw", "Vienna", "Prague", "Berlin", "Milan", "Paris", "London", "Athens", "Jerusalem"] 
 
 for city_name in cities:
-    #GET REQUEST
-    url = f"https://wttr.in/{city_name}?format=j1"
-    result = requests.get(url)
 
-    time = result.json()["current_condition"][0]["localObsDateTime"].split(" ")[1]
-    temp = result.json()["current_condition"][0]["temp_C"] + "°"
-    condition = result.json()["current_condition"][0]["weatherDesc"][0]["value"]
-    min_max = result.json()["weather"][0]["mintempC"] + " " + result.json()["weather"][0]["maxtempC"]
+    # url = f"https://wttr.in/{city_name}?format=j1"
+    # result = requests.get(url)
+
+    # time = result.json()["current_condition"][0]["localObsDateTime"].split(" ")[1]
+    # temp = result.json()["current_condition"][0]["temp_C"] + "°"
+    # condition = result.json()["current_condition"][0]["weatherDesc"][0]["value"]
+    # min_max = result.json()["weather"][0]["mintempC"] + " " + result.json()["weather"][0]["maxtempC"]
     
+    time = "10:55"
+    temp = "20°"
+    condition = "sunny"
+    min_max = "мин. 15, макс. 26"
+
     cf = City_Frame(vertical_scroll, city_name, time, temp, condition, min_max) 
