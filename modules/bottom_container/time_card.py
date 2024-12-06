@@ -1,9 +1,11 @@
 import customtkinter as ctk
 from .h_scroll_frame import h_s
 from PIL import Image
+import random
+import os
 
 class Time_Frame(ctk.CTkFrame):
-    def __init__(self, child_master, n_column):
+    def __init__(self, child_master, n_column, icon):
         ctk.CTkFrame.__init__(
             self,
             master=child_master,
@@ -29,8 +31,12 @@ class Time_Frame(ctk.CTkFrame):
         )        
         self.time_text.grid(row = 0, column = 0)
         
+        self.my_path = os.path.abspath(__file__)
+        self.my_dir = os.path.dirname(self.my_path)
+        self.my_icon = self.my_dir + "\\..\\..\\icons\\" + icon
+
         self.image = ctk.CTkImage(
-            Image.open("image.png"),
+            Image.open(self.my_icon),
             size = (75, 75)
         )
 
@@ -49,5 +55,8 @@ class Time_Frame(ctk.CTkFrame):
         )        
         self.temp_text.grid(row = 2, column = 0)
 
-for i in range(10):
-    tf = Time_Frame(h_s, i)
+icons_list = ["rain.png", "sun.png"]
+
+for n_column in range(10):
+    n_random = random.randint(0, 1)
+    tf = Time_Frame(h_s, n_column, icons_list[n_random])
