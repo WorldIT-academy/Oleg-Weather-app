@@ -1,11 +1,11 @@
 import customtkinter as ctk
 from .h_scroll_frame import h_s
 from PIL import Image
-import random
 import os
+import json
 
 class Time_Frame(ctk.CTkFrame):
-    def __init__(self, child_master, n_column, icon):
+    def __init__(self, child_master, n_column, time, temp, condition):
         ctk.CTkFrame.__init__(
             self,
             master=child_master,
@@ -15,6 +15,8 @@ class Time_Frame(ctk.CTkFrame):
             border_color="white",
             fg_color="#91bdc7"
         )
+        self.condition = condition.lower().replace(" ", "")
+        
         self.grid(row=0, column=n_column, padx = 10)
         self.grid_propagate(False)
 
@@ -26,14 +28,14 @@ class Time_Frame(ctk.CTkFrame):
 
         self.time_text = ctk.CTkLabel(
             master = self,
-            text = "11:11",
+            text = str(time),
             font = ("Arial", 22)
         )        
         self.time_text.grid(row = 0, column = 0)
         
         self.my_path = os.path.abspath(__file__)
         self.my_dir = os.path.dirname(self.my_path)
-        self.my_icon = self.my_dir + "\\..\\..\\icons\\" + icon
+        self.my_icon = self.convert_condition()
 
         self.image = ctk.CTkImage(
             Image.open(self.my_icon),
@@ -50,13 +52,42 @@ class Time_Frame(ctk.CTkFrame):
         
         self.temp_text = ctk.CTkLabel(
             master = self,
-            text = "25*",
+            text = str(temp) + "°",
             font = ("Arial", 26)
         )        
         self.temp_text.grid(row = 2, column = 0)
+    
+    def convert_condition(self):
+        dir = self.my_dir + "\\..\\..\\icons\\"
+        if self.condition == "cloudy":
+            icon = dir + "cloudy.png"
+        elif self.condition == "rainy":
+            icon = dir + "rainy.png"
+        elif self.condition == "snowy":
+            icon = dir + "snowy.png"
+        elif self.condition == "sunny":
+            icon = dir + "sunny.png"
+        elif self.condition == "partlycloudy":
+            icon = dir + "partlycloudy.png"      
+        elif self.condition == "mist":
+            icon = dir + "mist.png"
+        elif self.condition == "overcast":
+            icon = dir + "overcast.png"
+        else:
+            icon = dir + "question.png"
+        return icon
+        
 
-icons_list = ["rain.png", "sun.png"]
+my_path = os.path.abspath(__file__)
+my_dir = os.path.dirname(my_path)
+my_db = my_dir + "\\..\\..\\data_base.json"
 
-for n_column in range(10):
-    n_random = random.randint(0, 1)
-    tf = Time_Frame(h_s, n_column, icons_list[n_random])
+with open(my_db, "r") as file:
+    my_city = json.load(file)[0]
+    my_hourly_data = my_city["weather"][-2]["hourly"] 
+
+n_column = 0
+
+for my_hour in my_hourly_data:
+    tf = Time_Frame(h_s, n_column, my_hour["time"], my_hour["tempC"], my_hour["weatherDesc"][0]["value"])
+    n_column += 1

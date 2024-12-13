@@ -3,7 +3,7 @@ import customtkinter
 w = 1280
 h = 800
 
-screen = customtkinter.CTk() 
+screen = customtkinter.CTk(fg_color = "#91bdc7") 
 screen.title("Weather App")
 
 x = screen.winfo_screenwidth() // 2 - w // 2

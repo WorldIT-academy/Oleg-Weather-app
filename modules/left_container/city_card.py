@@ -2,7 +2,7 @@ import customtkinter as ctk
 from .scroll_frame import vertical_scroll
 import requests
 import json
-
+import os
 import datetime #библиотека для работы со временем (Timezone("Europe/Budapest") => "06.12.2024Z19:49:15")
 import zoneinfo #конвертация текста в таймзону ("Europe/Budapest" => Timezone("Europe/Budapest"))
 from timezonefinder import TimezoneFinder #конвертация координат в название зоны (51.254;26.678 => "Europe/Budapest")
@@ -64,43 +64,36 @@ class City_Frame(ctk.CTkFrame):
         )
         self.min_max_label.grid(row = 2, column = 1, sticky = "e", padx=(0,10), pady=(10,10))
 
-cities = ["Dnipro", "Kyiv", "Budapest", "Warsaw", "Vienna", "Prague", "Berlin", "Milan", "Paris", "London", "NewYork"] 
+# cities = ["Dnipro", "Kyiv", "Budapest", "Warsaw", "Vienna", "Prague", "Berlin", "Milan", "Paris", "London", "NewYork"] 
 
-my_city_info = requests.get("https://ipinfo.io/json")
-my_city_name = my_city_info.json()["city"]
+# my_city_info = requests.get("https://ipinfo.io/json")
+# my_city_name = my_city_info.json()["city"]
 
-if my_city_name not in cities: #не в (списке, словаре)
-    cities.append(my_city_name) 
+# if my_city_name not in cities: #не в (списке, словаре)
+#     cities.append(my_city_name) 
 
-for city_name in cities:
+my_path = os.path.abspath(__file__)
+my_dir = os.path.dirname(my_path)
+my_db = my_dir + "\\..\\..\\data_base.json"
 
-    url = f"https://wttr.in/{city_name}?format=j1"
-    result = requests.get(url)
+with open(my_db, "r") as file:
+    weather_data = json.load(file) #dump - для вгрузки, load - для выгрузки
 
-    with open("data_base.json", "r") as file:
-        added_list = json.load(file)
-        if len(cities) > len(added_list):
-            added_list.append(result.json())
+for city_weather in weather_data: #range(), "stewtwert", [1,2,3,4,5]
 
-    with open("data_base.json", "w") as file:
-        json.dump(added_list, file)
+    # url = f"http://wttr.in/{city_name}?format=j1"
+    # result = requests.get(url)
     
-    # time = result.json()["current_condition"][0]["localObsDateTime"].split(" ")[1]
-    # temp = result.json()["current_condition"][0]["temp_C"] + "°"
-    # condition = result.json()["current_condition"][0]["weatherDesc"][0]["value"]
-    # min_max = result.json()["weather"][0]["mintempC"] + " " + result.json()["weather"][0]["maxtempC"]
+    temp = city_weather["current_condition"][0]["temp_C"] + "°"
+    condition = city_weather["current_condition"][0]["weatherDesc"][0]["value"]
+    min_max = city_weather["weather"][0]["mintempC"] + " " + city_weather["weather"][0]["maxtempC"]
     
-    # my_lat = result.json()["nearest_area"][0]["latitude"]
-    # my_long = result.json()["nearest_area"][0]["longitude"]
+    my_lat = city_weather["nearest_area"][0]["latitude"]
+    my_long = city_weather["nearest_area"][0]["longitude"]
     
-    # timezona_name = TimezoneFinder().timezone_at(lat = float(my_lat), lng = float(my_long))
-    # zona = zoneinfo.ZoneInfo(timezona_name)
-    # my_time = datetime.datetime.now(zona)
+    timezona_name = TimezoneFinder().timezone_at(lat = float(my_lat), lng = float(my_long))
+    zona = zoneinfo.ZoneInfo(timezona_name)
+    my_time = datetime.datetime.now(zona)
+    time = my_time.strftime("%H:%M")
 
-    # time = my_time.strftime("%H:%M")
-    time = "15:15"
-    temp = "20°"
-    condition = "sunny"
-    min_max = "мин. 15, макс. 26"
-
-    cf = City_Frame(vertical_scroll, city_name, time, temp, condition, min_max) 
+    cf = City_Frame(vertical_scroll, "Город", time, temp, condition, min_max) 
