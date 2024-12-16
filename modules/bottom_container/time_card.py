@@ -25,12 +25,13 @@ class Time_Frame(ctk.CTkFrame):
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
         self.grid_rowconfigure(2, weight=1)
-
+        
+        #300 - 3:00, 600 - 6:00, 2100 - 21:00
         self.time_text = ctk.CTkLabel(
             master = self,
-            text = str(time),
+            text = str(int(time)//100) + ":00",
             font = ("Arial", 22)
-        )        
+        )       
         self.time_text.grid(row = 0, column = 0)
         
         self.my_path = os.path.abspath(__file__)

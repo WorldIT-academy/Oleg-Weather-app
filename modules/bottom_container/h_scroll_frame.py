@@ -17,4 +17,4 @@ class Horizontal_Scroll(ctk.CTkScrollableFrame):
         self.place(x = x, y = y)
         self.grid_rowconfigure(0, weight=1)
 
-h_s = Horizontal_Scroll(screen, 818, 240, 3, "white", 20, 369, 429) 
+h_s = Horizontal_Scroll(screen, 818, 240, 3, "white", 20, 369, 500) 

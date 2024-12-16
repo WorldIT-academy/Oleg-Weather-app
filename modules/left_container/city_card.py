@@ -85,8 +85,8 @@ for city_weather in weather_data: #range(), "stewtwert", [1,2,3,4,5]
     # result = requests.get(url)
     
     temp = city_weather["current_condition"][0]["temp_C"] + "°"
-    condition = city_weather["current_condition"][0]["weatherDesc"][0]["value"]
-    min_max = city_weather["weather"][0]["mintempC"] + " " + city_weather["weather"][0]["maxtempC"]
+    condition = city_weather["current_condition"][0]["weatherDesc"][0]["value"][0:15] + "..."
+    min_max = f"min:{city_weather["weather"][0]["mintempC"]} max:{city_weather["weather"][0]["maxtempC"]}"
     
     my_lat = city_weather["nearest_area"][0]["latitude"]
     my_long = city_weather["nearest_area"][0]["longitude"]
