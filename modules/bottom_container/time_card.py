@@ -84,9 +84,11 @@ my_dir = os.path.dirname(my_path)
 my_db = my_dir + "\\..\\..\\data_base.json"
 
 with open(my_db, "r") as file:
-    my_city = json.load(file)[0]
-    my_hourly_data = my_city["weather"][-2]["hourly"] 
-
+    my_city = json.load(file)
+    my_city_name = list(my_city.keys())[0]
+    # my_hourly_data = my_city["weather"][-2]["hourly"] 
+    my_hourly_data = my_city[my_city_name]['api_data']['weather'][0]['hourly']
+    print(my_hourly_data)
 n_column = 0
 
 for my_hour in my_hourly_data:

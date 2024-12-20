@@ -6,7 +6,9 @@ class Right_Subcontainer(ctk.CTkFrame):
         ctk.CTkFrame.__init__(
             self,
             master = child_master,
-            fg_color = "green"
+            fg_color = "#91bdc7",
+            border_width = 1,
+            border_color = "green"
         )
         self.grid(row=0, column=2)
 
