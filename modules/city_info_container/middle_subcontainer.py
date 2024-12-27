@@ -1,14 +1,14 @@
 import customtkinter as ctk
 from .info_container import info_cont
+import os
+import json
 
 class Middle_Subcontainer(ctk.CTkFrame):
-    def __init__(self, child_master, city_name = "Dnipro", temp = "11°С", condition = "Clear", min_max = '↓4°С  ↑11°С'):
+    def __init__(self, child_master, city_name, temp, condition, min_max):
         ctk.CTkFrame.__init__(
             self,
             master = child_master,
-            fg_color = "#91bdc7",
-            border_width=1,
-            border_color = "green"
+            fg_color = "#91bdc7"
         )
         self.grid(row=0, column=1)
 
@@ -18,10 +18,6 @@ class Middle_Subcontainer(ctk.CTkFrame):
         self.grid_rowconfigure(3, weight=1)
         self.grid_rowconfigure(4, weight=1)
         self.grid_columnconfigure(0, weight=1)
-        self.city_name = city_name
-        self.temp = temp
-        self.condition = condition
-        self.min_max = min_max
         
         self.current_position = ctk.CTkLabel(
             master = self,
@@ -33,7 +29,7 @@ class Middle_Subcontainer(ctk.CTkFrame):
         
         self.city = ctk.CTkLabel(
             master = self,
-            text = self.city_name,
+            text = city_name,
             font = ("Arial", 22),
             text_color = "white"
         )        
@@ -41,7 +37,7 @@ class Middle_Subcontainer(ctk.CTkFrame):
         
         self.temp_text = ctk.CTkLabel(
             master = self,
-            text = self.temp,
+            text = temp,
             font = ("Arial", 80),
             text_color = "white"
         )        
@@ -49,7 +45,7 @@ class Middle_Subcontainer(ctk.CTkFrame):
         
         self.condition_text = ctk.CTkLabel(
             master = self,
-            text = self.condition,
+            text = condition,
             font = ("Arial", 30),
             text_color = "white"
         )        
@@ -57,12 +53,22 @@ class Middle_Subcontainer(ctk.CTkFrame):
 
         self.min_max_text = ctk.CTkLabel(
             master = self,
-            text = self.min_max,
+            text = min_max,
             font = ("Arial", 30),
             text_color = "white"
         )        
         self.min_max_text.grid(row = 4, column = 0)
                 
+my_path = os.path.abspath(__file__)
+my_dir = os.path.dirname(my_path)
+my_db = my_dir + "\\..\\..\\data_base.json"
 
+with open(my_db, "r") as file:
+    db_data = json.load(file)
+    my_city = list(db_data.keys())[0]
+    
+    temp = db_data[my_city]["api_data"]["current_condition"][0]["temp_C"] + "°"
+    condition = db_data[my_city]["api_data"]["current_condition"][0]["weatherDesc"][0]["value"]
+    min_max = f'↓{db_data[my_city]["api_data"]["weather"][0]["mintempC"]}° ↑{db_data[my_city]["api_data"]["weather"][0]["maxtempC"]}°'
 
-middle_subcont = Middle_Subcontainer(info_cont)
+middle_subcont = Middle_Subcontainer(info_cont, my_city, temp, condition, min_max) 

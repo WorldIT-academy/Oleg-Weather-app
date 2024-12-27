@@ -3,9 +3,9 @@ from .scroll_frame import vertical_scroll
 import requests
 import json
 import os
-import datetime #библиотека для работы со временем (Timezone("Europe/Budapest") => "06.12.2024Z19:49:15")
-import zoneinfo #конвертация текста в таймзону ("Europe/Budapest" => Timezone("Europe/Budapest"))
-from timezonefinder import TimezoneFinder #конвертация координат в название зоны (51.254;26.678 => "Europe/Budapest")
+import datetime
+import zoneinfo
+from timezonefinder import TimezoneFinder
 
 
 class City_Frame(ctk.CTkFrame):
@@ -21,9 +21,9 @@ class City_Frame(ctk.CTkFrame):
         )
         self.pack(anchor = "center", pady = 7)
         
-        self.grid_propagate(False) #родитель игнорирует подстраивание под ребенка
-        self.grid_columnconfigure(0, weight=1) # колонка 0 имеет размер 1
-        self.grid_columnconfigure(1, weight=1) # колонка 1 имеет размер 1
+        self.grid_propagate(False)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
@@ -69,25 +69,22 @@ cities = ["Kyiv", "Budapest", "Warsaw", "Vienna", "Prague", "Berlin", "Milan", "
 my_city_info = requests.get("https://ipinfo.io/json")
 my_city_name = my_city_info.json()["city"]
 
-# if my_city_name not in cities: #не в (списке, словаре)
-#     cities.insert(0,my_city_name) 
+if my_city_name in cities:
+    cities.remove(my_city_name)
+
+cities.insert(0, my_city_name)
     
 db_data = {}
 
-# my_path = os.path.abspath(__file__)
-# my_dir = os.path.dirname(my_path)
-# my_db = my_dir + "\\..\\..\\data_base.json"
-
-# with open(my_db, "r") as file:
-#     weather_data = json.load(file) #dump - для вгрузки, load - для выгрузки
-
-for city in cities: #range(), "stewtwert", [1,2,3,4,5]
+for city in cities:
 
     url = f"http://wttr.in/{city}?format=j1"
     result = requests.get(url).json()
     
     temp = result["current_condition"][0]["temp_C"] + "°"
-    condition = result["current_condition"][0]["weatherDesc"][0]["value"][0:15] + "..."
+    condition = result["current_condition"][0]["weatherDesc"][0]["value"]
+    if len(condition) > 15:
+        condition = condition[0:15] + "..."
     min_max = f"min:{result['weather'][0]['mintempC']} max:{result['weather'][0]['maxtempC']}"
     
     my_lat = result["nearest_area"][0]["latitude"]
@@ -105,12 +102,11 @@ for city in cities: #range(), "stewtwert", [1,2,3,4,5]
         "api_data": result
     }
 
-    cf = City_Frame(vertical_scroll, "Город", time, temp, condition, min_max)
-    break
+    cf = City_Frame(vertical_scroll, city, time, temp, condition, min_max)
 
 my_path = os.path.abspath(__file__)
 my_dir = os.path.dirname(my_path)
 my_db = my_dir + "\\..\\..\\data_base.json"
 
 with open(my_db, "w") as file:
-    json.dump(db_data, file, indent=4) #dump - для вгрузки, load - для выгрузки
+    json.dump(db_data, file, indent=4)

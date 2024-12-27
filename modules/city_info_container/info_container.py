@@ -8,10 +8,7 @@ class Info_Container(ctk.CTkFrame):
             master = child_master,
             width = width,
             height = height,
-            fg_color = "#91bdc7",
-            border_width=1,
-            border_color = "red"
-            
+            fg_color = "#91bdc7"   
         )
         self.place(x = x, y = y)
 
