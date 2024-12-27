@@ -2,7 +2,7 @@ import customtkinter as ctk
 from .info_container import info_cont
 
 class Middle_Subcontainer(ctk.CTkFrame):
-    def __init__(self, child_master, city_name = "Dnipro", temp = "11", condition = "clear", min_max = '4 11'):
+    def __init__(self, child_master, city_name = "Dnipro", temp = "11°С", condition = "Clear", min_max = '↓4°С  ↑11°С'):
         ctk.CTkFrame.__init__(
             self,
             master = child_master,

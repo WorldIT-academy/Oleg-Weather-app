@@ -69,8 +69,8 @@ cities = ["Kyiv", "Budapest", "Warsaw", "Vienna", "Prague", "Berlin", "Milan", "
 my_city_info = requests.get("https://ipinfo.io/json")
 my_city_name = my_city_info.json()["city"]
 
-if my_city_name not in cities: #не в (списке, словаре)
-    cities.insert(0,my_city_name) 
+# if my_city_name not in cities: #не в (списке, словаре)
+#     cities.insert(0,my_city_name) 
     
 db_data = {}
 
